@@ -35,7 +35,7 @@ pipeline {
                 withSonarQubeEnv('sonarqube-server') {
                     // Ejecuta el escáner de SonarQube para proyectos Node.js.
                     // Asegúrate de tener instalado el escáner de SonarQube para Node.js en el agente de Jenkins.
-                    sh "sonar-scanner"
+                    sh "${SONAR_SCANNER}/bin/sonar-scanner -Dproject.settings=devops/sonar.properties"
                 }
 
                 // Configura un límite de tiempo de 2 minutos para esperar el resultado del análisis.
