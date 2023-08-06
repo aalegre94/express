@@ -1,0 +1,18 @@
+pipeline {
+
+    agent any
+
+    tools {
+        nodejs '20.3.0'
+    }
+
+    stages {
+
+        stage ('Compilar'){
+            steps {
+                echo 'Compilando ....'
+                sh 'npm install'
+            }
+        }
+    }
+}
