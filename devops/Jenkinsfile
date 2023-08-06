@@ -38,8 +38,15 @@ pipeline {
                 timeout(time: 2, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
                 }
-    }
-}
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Generando build...'
+                sh "docker build -t express-node:$BUILD_NUMBER ."
+            }
+        }
 
     }
 }
