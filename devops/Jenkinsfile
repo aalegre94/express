@@ -8,6 +8,9 @@ pipeline {
 
     environment {
         SONAR_SCANNER = tool 'SonarScaner'
+        DOCKER_HUB_CREDENTIALS = 'dockerHub'
+        DOCKER_IMAGE_NAME = 'aalegre25/express-node'
+        DOCKER_IMAGE_TAG = "$BUILD_NUMBER" 
     }
 
     stages {
@@ -44,9 +47,23 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Generando build...'
-                sh "docker build -t express-node:$BUILD_NUMBER ."
+                sh "docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}" 
             }
         }
+
+        stage('Publicar imagen'){
+
+            steps {
+                echo 'Publicando imagen...'
+
+                withCredentials([usernamePassword(credentialsId: DOCKER_HUB_CREDENTIALS, passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USERNAME')]) {
+                    script {
+                        def dockerHubRegistry = "docker.io" 
+                        sh "docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD} ${dockerHubRegistry}"
+                        sh "docker push ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
+                    }
+                }
+            }
 
     }
 }
