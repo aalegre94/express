@@ -28,20 +28,14 @@ pipeline {
 
         stage('Análisis de código estático') {
             steps {
-                // Imprime un mensaje en la consola de Jenkins para indicar que se está realizando el análisis.
+                
                 echo 'Analizando código con SonarQube...'
 
-                // Configura el entorno de SonarQube utilizando el servidor 'sonarqube-server'.
                 withSonarQubeEnv('sonarqube-server') {
-                    // Ejecuta el escáner de SonarQube para proyectos Node.js.
-                    // Asegúrate de tener instalado el escáner de SonarQube para Node.js en el agente de Jenkins.
                     sh "${SONAR_SCANNER}/bin/sonar-scanner -Dproject.settings=devops/sonar.properties"
                 }
 
-                // Configura un límite de tiempo de 2 minutos para esperar el resultado del análisis.
                 timeout(time: 2, unit: 'MINUTES') {
-                    // Espera el resultado del análisis y, si no cumple con los criterios de calidad definidos,
-                    // aborta la ejecución del pipeline.
                     waitForQualityGate abortPipeline: true
                 }
     }
