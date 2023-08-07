@@ -1,6 +1,6 @@
 pipeline {
 
-    agent { label "my_server"}
+    agent any
 
     tools {
         nodejs '20.3.0'
@@ -68,6 +68,10 @@ pipeline {
         }
 
         stage('Ejecutar imagen de Docker en servidor remoto') {
+
+            agent { 
+                label "my_server"
+            }
             steps {
                 echo 'Deploy...'
                 sh "docker run -d --rm --name express -p 3000:3000 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
