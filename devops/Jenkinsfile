@@ -94,8 +94,8 @@ pipeline {
             steps {
                 echo 'Deploy...'
                 sh "docker run -d --rm --name express -p 3000:3000 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
-                echo "Eliminar"
-                sh "docker rmi ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
+                // echo "Eliminar"
+                // sh "docker rmi ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
             }
         }
     }
