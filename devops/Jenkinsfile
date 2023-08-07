@@ -51,6 +51,17 @@ pipeline {
             }
         }
 
+        stage('Stop and Remove Container') {
+            // Aquí detenemos y eliminamos el contenedor antes de la construcción
+            steps {
+                script {
+                    // Reemplaza 'nombre_del_contenedor' con el nombre real de tu contenedor
+                    sh 'docker stop express || true'
+                    sh 'docker rm express || true'
+                }
+            }
+        }
+
         stage('Publicar imagen'){
 
             steps {
@@ -67,7 +78,7 @@ pipeline {
 
         }
 
-        stage('Ejecutar imagen de Docker en servidor remoto') {
+        stage('Deploy') {
 
             agent { 
                 label "my_server"
