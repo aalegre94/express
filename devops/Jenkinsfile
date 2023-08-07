@@ -70,18 +70,18 @@ pipeline {
         stage('Ejecutar imagen de Docker en servidor remoto') {
             steps {
                 script {
-                    def Docker = require('dockerode');
-                    def docker = new Docker({ host: '194.163.150.189', port: 2376, ca: credentials('docker_ca').file, cert: credentials('docker_client').file, key: credentials('docker_client-key').file });
+                    var Docker = require('dockerode');
+                    var docker = new Docker({ host: '194.163.150.189', port: 2376, ca: credentials('docker_ca').file, cert: credentials('docker_client').file, key: credentials('docker_client-key').file });
                     
                     // Nombre de la imagen de Docker que quieres ejecutar
-                    def dockerImage = "${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
+                    var dockerImage = "${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
                     
                     // Detener y eliminar cualquier contenedor previo con el mismo nombre en el servidor remoto
                     docker.getContainer('express').stop()
                       .then(() => docker.getContainer('express').remove())
                       .catch(() => {}) // Ignorar si el contenedor no existe
 
-                    def portBindings = {
+                    var portBindings = {
                         "3000/tcp": [{ "HostPort": "3000" }]
                     };
                     
