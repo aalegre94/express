@@ -80,9 +80,13 @@ pipeline {
                     docker.getContainer('express').stop()
                       .then(() => docker.getContainer('express').remove())
                       .catch(() => {}) // Ignorar si el contenedor no existe
+
+                    def portBindings = {
+                        "3000/tcp": [{ "HostPort": "3000" }]
+                    };
                     
                     // Ejecutar la imagen de Docker en el servidor remoto
-                    docker.createContainer({ Image: dockerImage, name: 'express' })
+                    docker.createContainer({ Image: dockerImage, name: 'express', HostConfig: { PortBindings: portBindings } })
                       .then(container => container.start())
                       .catch(error => console.error('Error al ejecutar el contenedor:', error))
                 }
