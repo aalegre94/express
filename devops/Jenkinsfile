@@ -79,11 +79,17 @@ pipeline {
             }
 
             post {
-                parallel {
                     
-                    always {
-                        echo 'Eliminar la imagen generada localmente'
-                        sh "docker rmi ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
+                always {
+                    echo 'Eliminar la imagen generada localmente'
+                }
+                parallel {
+                    stage('Borrando imagen'){
+
+                        steps{
+                            sh "docker rmi ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
+                        }
+
                     }
                 }
             }
