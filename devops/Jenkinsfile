@@ -60,7 +60,6 @@ pipeline {
                 script {
                     // Reemplaza 'nombre_del_contenedor' con el nombre real de tu contenedor
                     sh 'docker stop express || true'
-                    sh 'docker rm express || true'
                 }
             }
         }
@@ -78,6 +77,17 @@ pipeline {
                     }
                 }
             }
+
+            post {
+                parallel {
+                    
+                    always {
+                        echo 'Eliminar la imagen generada localmente'
+                        sh "docker rmi ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
+                    }
+                }
+            }
+
 
         }
 
