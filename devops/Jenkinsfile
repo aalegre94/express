@@ -52,6 +52,9 @@ pipeline {
         }
 
         stage('Stop and Remove Container') {
+            agent { 
+                label "my_server"
+            }
             // Aquí detenemos y eliminamos el contenedor antes de la construcción
             steps {
                 script {
