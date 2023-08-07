@@ -71,7 +71,7 @@ pipeline {
             steps {
                 script {
                     def Docker = require('dockerode');
-                    def docker = new Docker({ host: '194.163.150.189', port: 2376, ca: credentials('docker_ca').file, cert: credentials('docker_ca').file, key: credentials('docker_client_key').file });
+                    def docker = new Docker({ host: '194.163.150.189', port: 2376, ca: credentials('docker_ca').file, cert: credentials('docker_client').file, key: credentials('docker_client-key').file });
                     
                     // Nombre de la imagen de Docker que quieres ejecutar
                     def dockerImage = "${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
