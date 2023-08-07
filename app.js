@@ -9,7 +9,7 @@ app.use(
 
 app.use("/", (req, res, next) => {
   console.log("En otro midleware");
-  res.send("<h1>Hola desde Express</h1>");
+  res.send("<h1>Hola desde Express bebecita</h1>");
 });
 
 app.listen(3000);
