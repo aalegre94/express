@@ -87,7 +87,7 @@ pipeline {
             post {
                 always {
                     echo "Eliminando imagenes aneriores"
-                    sh 'docker image prune -a'
+                    sh 'docker image prune -af'
                 }
             }
         }
