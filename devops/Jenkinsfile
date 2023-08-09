@@ -73,26 +73,14 @@ pipeline {
             }
         }
 
-        stage('Stop and Remove Container') {
-            agent { 
-                label "my_server"
-            }
-            // Aquí detenemos y eliminamos el contenedor antes de la construcción
-            steps {
-                script {
-                    // Reemplaza 'nombre_del_contenedor' con el nombre real de tu contenedor
-                    sh 'docker stop express || true'
-                }
-            }
-        }
-
-
         stage('Deploy') {
 
             agent { 
                 label "my_server"
             }
             steps {
+                echo 'Stop container'
+                sh 'docker stop express || true'
                 echo 'Deploy...'
                 sh "docker run -d --rm --name express -p 3000:3000 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
             }
