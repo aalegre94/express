@@ -11,8 +11,9 @@ const shopRoutes = require("./routes/shop");
 app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms")
 );
-
+//para ver los request y para servir archivos staticos
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
