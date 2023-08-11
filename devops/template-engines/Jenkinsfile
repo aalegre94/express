@@ -1,0 +1,96 @@
+pipeline {
+
+    agent any
+
+    tools {
+        nodejs '20.3.0'
+    }
+
+    environment {
+        SONAR_SCANNER = tool 'SonarScaner'
+        DOCKER_HUB_CREDENTIALS = 'dockerHub'
+        DOCKER_IMAGE_NAME = 'aalegre25/express-template-engines'
+        DOCKER_IMAGE_TAG = "$BUILD_NUMBER" 
+    }
+
+    stages {
+
+        stage ('Compilar'){
+            steps {
+                echo 'Compilando ....'
+                sh 'npm install'
+            }
+        }
+
+        stage ('Pruebas'){
+            steps {
+                echo 'Pasando las pruebas ....'
+                sh 'npm test'
+            }
+        }
+
+        stage('Análisis de código estático') {
+            steps {
+                
+                echo 'Analizando código con SonarQube...'
+
+                withSonarQubeEnv('sonarqube-server') {
+                    sh "${SONAR_SCANNER}/bin/sonar-scanner -Dproject.settings=devops/template-engines/sonar.properties"
+                }
+
+                timeout(time: 2, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Generando build...'
+                sh "docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} ." 
+            }
+        }
+
+        stage('Publicar imagen'){
+
+            steps {
+                echo 'Publicando imagen...'
+
+                withCredentials([usernamePassword(credentialsId: DOCKER_HUB_CREDENTIALS, passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USERNAME')]) {
+                    script {
+                        def dockerHubRegistry = "docker.io" 
+                        sh 'docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD} ${dockerHubRegistry}'
+                        sh "docker push ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
+                    }
+                }
+            }
+
+            post {
+                always {
+                    echo 'Eliminar la imagen generada localmente'
+                    sh "docker rmi ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
+                }
+            }
+        }
+
+        stage('Deploy') {
+
+            agent { 
+                label "my_server"
+            }
+            steps {
+                echo 'Stop container'
+                sh 'docker stop template-engines || true'
+                echo 'Deploy...'
+                sh "docker run -d --rm --name template-engines -p 3000:3000 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
+            }
+            post {
+                always {
+                    echo "Eliminando imagenes aneriores"
+                    sh 'docker image prune -af'
+                }
+            }
+        }
+    }
+    
+}
