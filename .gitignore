@@ -1,9 +1,6 @@
 node_modules
 data/*.json
-!data/products.json
-!package.json
-!package-lock.json
-*.json
+!data/file.txt
 
 # Created by https://www.toptal.com/developers/gitignore/api/node
 # Edit at https://www.toptal.com/developers/gitignore?templates=node
