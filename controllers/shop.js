@@ -23,7 +23,9 @@ exports.getProducts = (req, res, next) => {
 // /products/:productID => GET
 exports.getProduct = (req, res, next) => {
   const proId = req.params.productId;
-  console.log(proId);
+  Product.findById(proId, (product) => {
+    console.log(product);
+  });
   res.redirect("/");
 };
 // /cart => GET
