@@ -20,6 +20,12 @@ exports.getProducts = (req, res, next) => {
     });
   });
 };
+// /products/:productID => GET
+exports.getProduct = (req, res, next) => {
+  const proId = req.params.productId;
+  console.log(proId);
+  res.redirect("/");
+};
 // /cart => GET
 exports.getCart = (req, res, next) => {
   res.render("shop/carro", { pageTitle: "Carrito", path: "/cart" });
