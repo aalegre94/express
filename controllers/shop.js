@@ -1,4 +1,5 @@
 const Product = require("../models/product");
+const Cart = require("../models/cart");
 
 // / => GET
 exports.getIndex = (req, res, next) => {
@@ -39,7 +40,9 @@ exports.getCart = (req, res, next) => {
 // /cart => POST
 exports.postCart = (req, res, next) => {
   const proId = req.body.productId;
-  console.log(proId);
+  Product.findById(proId, (product) => {
+    Cart.addProduct(proId, product.price);
+  });
   res.redirect("/cart");
 };
 // /orders => GET
