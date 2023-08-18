@@ -1,9 +1,10 @@
 const Product = require("../models/product");
 // /admin/add-product => GET
 exports.getAddProduct = (req, res, next) => {
-  res.render("admin/add-product", {
+  res.render("admin/editar-producto", {
     pageTitle: "Add Product",
     path: "/admin/add-product",
+    editing: false,
   });
 };
 // /admin/products => GET
@@ -34,9 +35,16 @@ exports.getEditProduct = (req, res, next) => {
   if (!editMode) {
     return res.redirect("/");
   }
-  res.render("admin/editar-producto", {
-    pageTitle: "Edit Product",
-    path: "/admin/edit-product",
-    editing: editMode,
+  const proId = req.params.productId;
+  Product.findById(proId, (product) => {
+    if (!product) {
+      return res.redirect("/");
+    }
+    res.render("admin/editar-producto", {
+      pageTitle: "Edit Product",
+      path: "/admin/edit-product",
+      editing: editMode,
+      product: product,
+    });
   });
 };
