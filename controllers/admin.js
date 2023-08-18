@@ -27,3 +27,16 @@ exports.postAddProduct = (req, res, next) => {
   product.save();
   res.redirect("/");
 };
+
+// /admin/edit-product => GET
+exports.getEditProduct = (req, res, next) => {
+  const editMode = req.query.edit;
+  if (!editMode) {
+    return res.redirect("/");
+  }
+  res.render("admin/editar-producto", {
+    pageTitle: "Edit Product",
+    path: "/admin/edit-product",
+    editing: editMode,
+  });
+};
