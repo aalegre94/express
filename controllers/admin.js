@@ -29,7 +29,7 @@ exports.postAddProduct = (req, res, next) => {
   res.redirect("/");
 };
 
-// /admin/edit-product => GET
+// /admin/edit-product/:productID?edit=true => GET
 exports.getEditProduct = (req, res, next) => {
   const editMode = req.query.edit;
   if (!editMode) {
