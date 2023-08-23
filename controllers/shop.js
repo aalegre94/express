@@ -35,7 +35,28 @@ exports.getProduct = (req, res, next) => {
 };
 // /cart => GET
 exports.getCart = (req, res, next) => {
-  res.render("shop/carro", { pageTitle: "Carrito", path: "/cart" });
+  Cart.getCart((cart) => {
+    Product.fetchAll((products) => {
+      const carroProductos = [];
+      for (product of products) {
+        const carroProductoData = cart.products.find(
+          (prod) => prod.id === product.id
+        );
+
+        if (carroProductoData) {
+          carroProductos.push({
+            productData: product,
+            qty: carroProductoData.qty,
+          });
+        }
+      }
+      res.render("shop/carro", {
+        pageTitle: "Carrito",
+        path: "/cart",
+        products: carroProductos,
+      });
+    });
+  });
 };
 // /cart => POST
 exports.postCart = (req, res, next) => {

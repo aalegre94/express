@@ -20,6 +20,15 @@ form {
   display: inline;
 }
 
+li {
+  text-align: center;
+  list-style: none;
+}
+
+.img_cart {
+  width: 200px;
+}
+
 .centered {
   text-align: center;
 }

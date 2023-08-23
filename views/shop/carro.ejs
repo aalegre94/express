@@ -3,4 +3,15 @@
 
 <body>
 <%- include('../includes/navigation.ejs') %>
+<main>
+    <% if (products.length > 0 ) { %>
+        <ul>
+            <% products.forEach(p =>  { %>
+                <li><img class="img_cart" src="<%= p.productData.imageUrl %>" alt=""> <%= p.productData.title %> (<%= p.qty  %>)</li>
+            <% })%>
+        </ul>
+    <% } else { %>
+        <h1>No hay productos en el carro</h1>
+    <% } %>    
+</main>
 <%- include('../includes/end.ejs') %>
