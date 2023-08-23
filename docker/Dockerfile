@@ -4,13 +4,13 @@ FROM node:slim
 WORKDIR /usr/src/app
 
 # Copy the package.json and package-lock.json files to the container
-COPY package*.json ./
+# COPY package*.json ./
 
 # Install project dependencies
 # RUN npm install
 
 # Copy the rest of the application files to the container
-COPY . .
+COPY ../ .
 
 # Expose the port your Express app listens on (replace 3000 with your port if needed)
 EXPOSE 3000

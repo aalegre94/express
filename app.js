@@ -11,12 +11,15 @@ app.set("views", "views");
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const errorController = require("./controllers/error");
+const db = rquire("./util/database.js");
 
 //Para ver el estado del request
 // app.use(
 //   morgan(":method :url :status :res[content-length] - :response-time ms")
 // );
 //para ver los request y para servir archivos staticos
+
+db.execute("SELECT * FROM products;");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
