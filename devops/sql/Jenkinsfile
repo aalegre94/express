@@ -87,11 +87,11 @@ pipeline {
                 
                 timeout(time: 5, unit: 'MINUTES') {
                     echo 'Deploy bd'
-                    sh "docker run -d --name dbnode --network node -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=db -e MYSQL_USER=username -e MYSQL_PASSWORD=password mysql:8.0.33"
+                    sh "docker run -d --name dbnode --net=node --ip 172.23.0.2 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=db -e MYSQL_USER=username -e MYSQL_PASSWORD=password mysql:8.0.33"
                 }
                 
                 echo 'Deploy app...'
-                sh "docker run -d --rm --name express --net=node -p 3000:3000 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
+                sh "docker run -d --rm --name express --net=node --ip 172.23.0.3 -p 3000:3000 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
                 
             }
             post {
