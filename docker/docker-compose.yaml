@@ -19,6 +19,6 @@ services:
 volumes:
   my-db:
 networks:
-  node:
-    name: node
-    driver: bridge
+  default:
+    external:
+      name: node
