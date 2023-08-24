@@ -79,9 +79,9 @@ pipeline {
                 label "serPro"
             }
             steps {
-                echo 'Stop container'
+                echo 'Stop containers'
                 sh 'docker stop express || true'
-                sh 'docker stop tiendaNode || true'
+                sh "docker-compose -f docker/docker-compose.yaml down -v"
                 echo 'Deploy bd'
                 sh "docker-compose -f docker/docker-compose.yaml up -d"
                 echo 'Deploy app...'
@@ -92,7 +92,6 @@ pipeline {
                 always {
                     echo "Eliminando imagenes aneriores"
                     sh 'docker image prune -af'
-                    sh "docker-compose -f docker/docker-compose.yaml down -v"
                 }
             }
         }
