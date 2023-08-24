@@ -15,9 +15,9 @@ services:
     volumes:
       - my-db:/var/lib/mysql
     networks:
-      - curso-devops
+      - node
 volumes:
   my-db:
 networks:
-  curso-devops:
+  node:
     external: true

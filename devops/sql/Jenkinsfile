@@ -85,7 +85,7 @@ pipeline {
                 echo 'Deploy bd'
                 sh "docker-compose -f docker/docker-compose.yaml up -d"
                 echo 'Deploy app...'
-                sh "docker run -d --rm --name express -p 3000:3000 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
+                sh "docker run -d --rm --name express --net=node -p 3000:3000 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
                 
             }
             post {
