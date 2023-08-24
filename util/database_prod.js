@@ -1,11 +1,11 @@
 const mysql = require("mysql2");
 
 const pool = mysql.createPool({
-  host: "mysql",
+  host: "dbnode",
   port: 3306,
   user: "root",
   database: "db",
-  password: "password",
+  password: "root",
 });
 
 pool.getConnection((err, connection) => {
