@@ -83,7 +83,7 @@ pipeline {
                     echo 'Stop containers'
                     sh 'docker stop express || true'
                     sh "docker stop dbnode || true"
-                    sh 'ocker network rm nodered'
+                    sh 'docker network rm nodered'
                 }
 
                 sh 'docker network create --subnet=172.25.0.0/24 nodered'
