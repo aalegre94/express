@@ -11,7 +11,7 @@ app.set("views", "views");
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const errorController = require("./controllers/error");
-const db = require("./util/database_dev.js");
+// const db = require("./util/database_dev.js");
 const db = require("./util/database_prod.js");
 
 //Para ver el estado del request
