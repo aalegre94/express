@@ -1,7 +1,7 @@
 const mysql = require("mysql2");
 
 const pool = mysql.createPool({
-  host: "tiendaNode",
+  host: "dbmysql",
   port: 3306,
   user: "root",
   database: "db",
@@ -13,7 +13,7 @@ pool.getConnection((err, connection) => {
     console.error("Error connecting to MySQL:", err);
     return;
   }
-  console.log("Connected to MySQL database");
+  console.log("Connected to MySQL database :) ");
   connection.release(); // Importante: liberar la conexión después de la verificación
 });
 
