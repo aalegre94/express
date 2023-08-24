@@ -80,8 +80,8 @@ pipeline {
             }
             steps {
                 echo 'Stop container'
-                sh 'docker stop express-sql || true'
-                sh 'docker stop docker-dbmysql-1 || true'
+                sh 'docker stop express || true'
+                sh 'docker stop tiendaNode || true'
                 echo 'Deploy bd'
                 sh "docker-compose -f docker/docker-compose.yaml up -d"
                 echo 'Deploy app...'
@@ -92,6 +92,7 @@ pipeline {
                 always {
                     echo "Eliminando imagenes aneriores"
                     sh 'docker image prune -af'
+                    sh "docker-compose -f docker/docker-compose.yaml down -v"
                 }
             }
         }
