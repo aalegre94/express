@@ -20,4 +20,4 @@ volumes:
   my-db:
 networks:
   node:
-    external: true
+    driver: bridge
