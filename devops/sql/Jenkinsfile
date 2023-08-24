@@ -79,11 +79,17 @@ pipeline {
                 label "serPro"
             }
             steps {
-                echo 'Stop containers'
-                sh 'docker stop express || true'
-                sh "docker-compose -f docker/docker-compose.yaml down -v"
-                echo 'Deploy bd'
-                sh "docker-compose -f docker/docker-compose.yaml up -d"
+                timeout(time: 2, unit: 'MINUTES') {
+                    echo 'Stop containers'
+                    sh 'docker stop express || true'
+                    sh "docker-compose -f docker/docker-compose.yaml down -v"
+                }
+                
+                timeout(time: 5, unit: 'MINUTES') {
+                    echo 'Deploy bd'
+                    sh "docker-compose -f docker/docker-compose.yaml up -d"
+                }
+                
                 echo 'Deploy app...'
                 sh "docker run -d --rm --name express --net=node -p 3000:3000 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
                 

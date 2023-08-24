@@ -20,4 +20,5 @@ volumes:
   my-db:
 networks:
   node:
+    name: node
     driver: bridge
