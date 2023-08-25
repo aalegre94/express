@@ -20,13 +20,13 @@ const errorController = require("./controllers/error");
 // );
 //para ver los request y para servir archivos staticos
 
-// db.execute("SELECT * FROM products")
-//   .then((resultado) => {
-//     console.log(resultado);
-//   })
-//   .catch((error) => {
-//     console.log(error);
-//   });
+db.execute("SELECT VERSION() as version")
+  .then((resultado) => {
+    console.log(resultado);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
