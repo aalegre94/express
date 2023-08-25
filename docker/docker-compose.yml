@@ -13,7 +13,6 @@ services:
       MYSQL_AUTHENTICATION_PLUGIN: "mysql_native_password"
     ports:
       - "3306:3306"
-    command: --default-authentication-plugin=mysql_native_password
 
   express:
     image: aalegre25/express-sql:${BUILD_NUMBER}
