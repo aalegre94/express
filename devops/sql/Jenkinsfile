@@ -80,21 +80,31 @@ pipeline {
             }
             steps {
                 timeout(time: 2, unit: 'MINUTES') {
-                    echo 'Stop containers'
-                    sh 'docker stop express || true'
-                    sh "docker stop dbnode || true"
-                    sh 'docker network rm nodered || true'
-                }
+                    echo 'Stopping containers'
+                    sh 'docker-compose -f docker/docker-compose.yml down -v'
+                }   
 
-                sh 'docker network create --subnet=172.25.0.0/24 nodered'
+                echo 'Deploying containers...'
+                sh 'source docker/.env && docker-compose -f docker/docker-compose up -d'
+
                 
-                timeout(time: 5, unit: 'MINUTES') {
-                    echo 'Deploy bd'
-                    sh "docker run --rm -d --name dbnode --net=nodered --ip=172.25.0.2 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=db -e MYSQL_USER=username -e MYSQL_PASSWORD=password mysql:8.0.33"
-                }
+
+                // timeout(time: 2, unit: 'MINUTES') {
+                //     echo 'Stop containers'
+                //     sh 'docker stop express || true'
+                //     sh "docker stop dbnode || true"
+                //     sh 'docker network rm nodered || true'
+                // }
+
+                // sh 'docker network create --subnet=172.25.0.0/24 nodered'
                 
-                echo 'Deploy app...'
-                sh "docker run -d --rm --name express --net=nodered --ip 172.25.0.3 -p 3000:3000 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
+                // timeout(time: 5, unit: 'MINUTES') {
+                //     echo 'Deploy bd'
+                //     sh "docker run --rm -d --name dbnode --net=nodered --ip=172.25.0.2 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=db -e MYSQL_USER=username -e MYSQL_PASSWORD=password mysql:8.0.33"
+                // }
+                
+                // echo 'Deploy app...'
+                // sh "docker run -d --rm --name express --net=nodered --ip 172.25.0.3 -p 3000:3000 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
                 
             }
             post {
