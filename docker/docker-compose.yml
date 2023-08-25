@@ -1,15 +1,16 @@
 version: "3"
 services:
   dbnode:
-    image: mysql:5.7.43
-    container_name: dbnode
+    image: mysql:8.0
+    container_name: dbmysql
     networks:
       - nodered
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: db
-      MYSQL_USER: username
+      MYSQL_USER: user
       MYSQL_PASSWORD: password
+      MYSQL_AUTHENTICATION_PLUGIN: "mysql_native_password"
     ports:
       - "3306:3306"
     command: --default-authentication-plugin=mysql_native_password
@@ -19,6 +20,11 @@ services:
     container_name: express
     ports:
       - "3000:3000"
+    environment:
+      DB_HOST: dbnode
+      DB_USER: user
+      DB_PASSWORD: password
+      DB_DATABASE: db
     networks:
       - nodered
 networks:
