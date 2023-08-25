@@ -12,7 +12,7 @@ const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const errorController = require("./controllers/error");
 // const db = require("./util/database_dev.js");
-const db = require("./util/database_prod.js");
+// const db = require("./util/database_prod.js");
 
 //Para ver el estado del request
 // app.use(
@@ -20,13 +20,13 @@ const db = require("./util/database_prod.js");
 // );
 //para ver los request y para servir archivos staticos
 
-db.execute("SELECT * FROM products")
-  .then((resultado) => {
-    console.log(resultado);
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+// db.execute("SELECT * FROM products")
+//   .then((resultado) => {
+//     console.log(resultado);
+//   })
+//   .catch((error) => {
+//     console.log(error);
+//   });
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
