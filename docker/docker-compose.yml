@@ -3,8 +3,8 @@ services:
   dbnode:
     image: mysql:5.7
     container_name: dbmysql
-    networks:
-      - nodered
+    # networks:
+    #   - nodered
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: db
@@ -24,13 +24,13 @@ services:
       DB_USER: user
       DB_PASSWORD: password
       DB_DATABASE: db
-    networks:
-      - nodered
-networks:
-  nodered:
-    ipam:
-      config:
-        - subnet: 172.25.0.0/24
+#     networks:
+#       - nodered
+# networks:
+#   nodered:
+#     ipam:
+#       config:
+#         - subnet: 172.25.0.0/24
 # version: "3.3"
 
 # services:
