@@ -3,24 +3,24 @@ const Cart = require("../models/cart");
 
 // / => GET
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll()
-    .then(([rows, fieldData]) => {
+  Product.findAll()
+    .then((products) => {
       res.render("shop/index", {
         pageTitle: "Shop",
         path: "/",
-        productos: rows,
+        productos: products,
       });
     })
     .catch((err) => console.error(err));
 };
 // /products => GET
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
-    .then(([rows, fieldData]) => {
+  Product.findAll()
+    .then((products) => {
       res.render("shop/lista-de-productos", {
         pageTitle: "Productos",
         path: "/products",
-        productos: rows,
+        productos: products,
       });
     })
     .catch((err) => console.error(err));

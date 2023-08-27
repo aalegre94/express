@@ -9,12 +9,12 @@ exports.getAddProduct = (req, res, next) => {
 };
 // /admin/products => GET
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
-    .then(([rows, fieldData]) => {
+  Product.findAll()
+    .then((products) => {
       res.render("admin/productos", {
         pageTitle: "Admin Productos",
         path: "/admin/products",
-        productos: rows,
+        productos: products,
       });
     })
     .catch((err) => console.error(err));
