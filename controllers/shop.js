@@ -1,5 +1,6 @@
 const Product = require("../models/product");
 const Cart = require("../models/cart");
+const { where } = require("sequelize");
 
 // / => GET
 exports.getIndex = (req, res, next) => {
@@ -29,15 +30,25 @@ exports.getProducts = (req, res, next) => {
 // /products/:productID => GET
 exports.getProduct = (req, res, next) => {
   const proId = req.params.productId;
-  Product.findById(proId)
-    .then(([product]) => {
+  Product.findByPk(proId)
+    .then((product) => {
       res.render("shop/detalle-del-producto", {
-        pageTitle: "Detalle",
-        product: product[0],
+        pageTitle: product.title,
+        product: product,
         path: "/product",
       });
     })
     .catch((err) => console.error(err));
+  //solucion con where
+  // Product.findAll({ where: { id: proId } })
+  //   .then((products) => {
+  //     res.render("shop/detalle-del-producto", {
+  //       pageTitle: products[0].title,
+  //       product: products[0],
+  //       path: "/product",
+  //     });
+  //   })
+  //   .catch((err) => console.error(err));
 };
 // /cart => GET
 exports.getCart = (req, res, next) => {
