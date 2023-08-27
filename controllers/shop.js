@@ -15,13 +15,16 @@ exports.getIndex = (req, res, next) => {
 };
 // /products => GET
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll((products) => {
-    res.render("shop/lista-de-productos", {
-      pageTitle: "Productos",
-      path: "/products",
-      productos: products,
-    });
-  });
+  Product.fetchAll()
+    .then(([rows, fieldData]) => {
+      res.render("shop/lista-de-productos", {
+        pageTitle: "Productos",
+        path: "/products",
+        productos: rows,
+      });
+    })
+    .catch((err) => console.error(err));
+  (products) => {};
 };
 // /products/:productID => GET
 exports.getProduct = (req, res, next) => {

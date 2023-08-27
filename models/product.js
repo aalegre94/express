@@ -1,5 +1,5 @@
-// const db = require("../util/database_dev.js");
-const db = require("../util/database_prod.js");
+const db = require("../util/database_dev.js");
+// const db = require("../util/database_prod.js");
 const Cart = require("./cart");
 
 module.exports = class Product {
