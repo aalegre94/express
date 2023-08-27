@@ -1,0 +1,110 @@
+pipeline {
+
+    agent any
+
+    tools {
+        nodejs '20.3.0'
+    }
+
+    environment {
+        SONAR_SCANNER = tool 'SonarScaner'
+        DOCKER_HUB_CREDENTIALS = 'dockerHub'
+        DOCKER_IMAGE_NAME = 'aalegre25/express-sequelize'
+        DOCKER_IMAGE_TAG = "$BUILD_NUMBER" 
+    }
+
+    stages {
+
+        stage ('Compilar'){
+            steps {
+                echo 'Compilando ....'
+                sh 'npm install'
+            }
+        }
+
+        stage ('Pruebas'){
+            steps {
+                echo 'Pasando las pruebas ....'
+                sh 'npm test'
+            }
+        }
+
+        // stage('Análisis de código estático') {
+        //     steps {
+                
+        //         echo 'Analizando código con SonarQube...'
+
+        //         withSonarQubeEnv('sonarqube-server') {
+        //             sh "${SONAR_SCANNER}/bin/sonar-scanner -Dproject.settings=devops/sonar.properties"
+        //         }
+
+        //         timeout(time: 2, unit: 'MINUTES') {
+        //             waitForQualityGate abortPipeline: true
+        //         }
+        //     }
+        // }
+
+        stage('Build') {
+            steps {
+                echo 'Generando build...'
+                sh "docker build -f docker/Dockerfile -t ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} ." 
+            }
+        }
+
+        stage('Publicar imagen'){
+
+            steps {
+                echo 'Publicando imagen...'
+
+                withCredentials([usernamePassword(credentialsId: DOCKER_HUB_CREDENTIALS, passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USERNAME')]) {
+                    script {
+                        def dockerHubRegistry = "docker.io" 
+                        sh 'docker login -u ${DOCKERHUB_USERNAME} -p ${DOCKERHUB_PASSWORD} ${dockerHubRegistry}'
+                        sh "docker push ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
+                    }
+                }
+            }
+
+            post {
+                always {
+                    echo 'Eliminar la imagen generada localmente'
+                    sh "docker rmi ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
+                }
+            }
+        }
+
+        stage('Deploy') {
+
+            agent { 
+                label "serPro"
+            }
+            steps {
+                // timeout(time: 2, unit: 'MINUTES') {
+                //     echo 'Stopping containers'
+                //     sh 'docker-compose -f docker/docker-compose.yml down -v'
+                // }   
+
+                // echo 'Deploying containers...'
+                // sh 'source docker/.env && docker-compose -f docker/docker-compose.yml up -d'
+
+                
+
+                timeout(time: 2, unit: 'MINUTES') {
+                    echo 'Stop containers'
+                    sh 'docker stop express || true'
+                }
+
+                echo 'Deploy app...'
+                sh "docker run -d --rm --name express --network nodesql  -p 3000:3000 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
+                
+            }
+            post {
+                always {
+                    echo "Eliminando imagenes aneriores"
+                    sh 'docker image prune -af'
+                }
+            }
+        }
+    }
+    
+}
