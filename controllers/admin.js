@@ -35,6 +35,7 @@ exports.postAddProduct = (req, res, next) => {
     .then((resultado) => {
       // console.log(resultado);
       console.log("Product creado");
+      res.redirect("/");
     })
     .catch((err) => {
       console.error(err);
