@@ -1,12 +1,12 @@
 # Use the official Node.js image as the base image
-FROM node:slim
+FROM node:18-slim
 # Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy the package.json and package-lock.json files to the container
-# COPY package*.json ./
+# # Copy the package.json and package-lock.json files to the container
+# COPY ../package*.json ./
 
-# Install project dependencies
+# # Install project dependencies
 # RUN npm install
 
 # Copy the rest of the application files to the container

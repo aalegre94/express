@@ -15,7 +15,7 @@ services:
       - "3306:3306"
 
   express:
-    image: aalegre25/express-sql:${BUILD_NUMBER}
+    image: aalegre25/express-sql:43
     container_name: express
     ports:
       - "3000:3000"
