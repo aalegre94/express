@@ -89,10 +89,10 @@ pipeline {
 
                 
 
-                // timeout(time: 2, unit: 'MINUTES') {
-                //     echo 'Stop containers'
-                //     sh 'docker stop express || true'
-                // }
+                timeout(time: 2, unit: 'MINUTES') {
+                    echo 'Stop containers'
+                    sh 'docker stop express || true'
+                }
 
                 echo 'Deploy app...'
                 sh "docker run -d --rm --name express --network nodesql  -p 3000:3000 ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
