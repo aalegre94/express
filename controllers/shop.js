@@ -29,14 +29,15 @@ exports.getProducts = (req, res, next) => {
 // /products/:productID => GET
 exports.getProduct = (req, res, next) => {
   const proId = req.params.productId;
-  Product.findById(proId, (product) => {
-    res.render("shop/detalle-del-producto", {
-      pageTitle: "Detalle",
-      product: product,
-      path: "/product",
-    });
-  });
-  // res.redirect("/");
+  Product.findById(proId)
+    .then(([product]) => {
+      res.render("shop/detalle-del-producto", {
+        pageTitle: "Detalle",
+        product: product[0],
+        path: "/product",
+      });
+    })
+    .catch((err) => console.error(err));
 };
 // /cart => GET
 exports.getCart = (req, res, next) => {
