@@ -7,4 +7,5 @@ CREATE TABLE `db`.`products` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);
 
-  
+INSERT INTO `db`.`products` (`title`, `price`, `description`, `imageUrl`) VALUES ('Monkey D. Luffy', '12', 'luffy', 'https://e.rpp-noticias.io/xlarge/2018/11/26/551055_716795.jpg');
+INSERT INTO `db`.`products` (`title`, `price`, `description`, `imageUrl`) VALUES ('Roronoa Zoro', '23', 'zoro', 'https://asset-2.tstatic.net/banten/foto/bank/images/Zoro-One-Piece-faefwef.jpg');
