@@ -20,7 +20,7 @@ const db = require("./util/database_prod.js");
 // );
 //para ver los request y para servir archivos staticos
 
-db.execute("SELECT VERSION() as version")
+db.execute("SELECT * from products")
   .then((resultado) => {
     console.log(resultado);
   })
