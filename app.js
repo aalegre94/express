@@ -11,11 +11,13 @@ app.set("views", "views");
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const errorController = require("./controllers/error");
-const sequelize = require("./util/database_dev");
-// const sequelize = require("./util/database_prod");
+// const sequelize = require("./util/database_dev");
+const sequelize = require("./util/database_prod");
 // models
 const Product = require("./models/product");
 const User = require("./models/user");
+const Cart = require("./models/cart");
+const CartItem = require("./models/cart-item");
 
 //Para ver el estado del request
 // app.use(
@@ -42,12 +44,19 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 // relaciones
-Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+// 1 a N
 User.hasMany(Product);
+Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+// 1 a 1
+User.hasOne(Cart);
+Cart.belongsTo(User);
+// N a N
+Cart.belongsToMany(Product, { through: CartItem });
+Product.belongsToMany(Cart, { through: CartItem });
 
 sequelize
-  // .sync({ force: true })
-  .sync()
+  .sync({ force: true })
+  // .sync()
   .then((resultado) => {
     // console.log(resultado);
     return User.findByPk(1);
