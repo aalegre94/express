@@ -1,6 +1,6 @@
 const Product = require("../models/product");
 const Cart = require("../models/cart");
-const { where } = require("sequelize");
+// const { where } = require("sequelize");
 
 // / => GET
 exports.getIndex = (req, res, next) => {
