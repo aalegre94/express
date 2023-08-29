@@ -9,7 +9,9 @@ exports.getAddProduct = (req, res, next) => {
 };
 // /admin/products => GET
 exports.getProducts = (req, res, next) => {
-  Product.findAll()
+  // Product.findAll()
+  req.user
+    .getProducts()
     .then((products) => {
       res.render("admin/productos", {
         pageTitle: "Admin Productos",
@@ -67,8 +69,14 @@ exports.getEditProduct = (req, res, next) => {
     return res.redirect("/");
   }
   const proId = req.params.productId;
-  Product.findByPk(proId)
-    .then((product) => {
+  req.user
+    .getProducts({ where: { id: proId } })
+    // Product.findByPk(proId)
+    .then((products) => {
+      const product = products[0];
+      if (!product) {
+        return res.redirect("/");
+      }
       res.render("admin/editar-producto", {
         pageTitle: `Edit Product - ${product.title}`,
         path: "/admin/edit-product",

@@ -11,8 +11,8 @@ app.set("views", "views");
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const errorController = require("./controllers/error");
-// const sequelize = require("./util/database_dev");
-const sequelize = require("./util/database_prod");
+const sequelize = require("./util/database_dev");
+// const sequelize = require("./util/database_prod");
 // models
 const Product = require("./models/product");
 const User = require("./models/user");
@@ -41,7 +41,6 @@ app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 
 app.use(errorController.get404);
-
 // relaciones
 Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
 User.hasMany(Product);
