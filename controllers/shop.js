@@ -52,28 +52,21 @@ exports.getProduct = (req, res, next) => {
 };
 // /cart => GET
 exports.getCart = (req, res, next) => {
-  Cart.getCart((cart) => {
-    Product.fetchAll((products) => {
-      const carroProductos = [];
-      for (product of products) {
-        const carroProductoData = cart.products.find(
-          (prod) => prod.id === product.id
-        );
-
-        if (carroProductoData) {
-          carroProductos.push({
-            productData: product,
-            qty: carroProductoData.qty,
+  req.user
+    .getCart()
+    .then((cart) => {
+      return cart
+        .getProducts()
+        .then((products) => {
+          res.render("shop/carro", {
+            pageTitle: "Carrito",
+            path: "/cart",
+            products: products,
           });
-        }
-      }
-      res.render("shop/carro", {
-        pageTitle: "Carrito",
-        path: "/cart",
-        products: carroProductos,
-      });
-    });
-  });
+        })
+        .catch((err) => console.error(err));
+    })
+    .catch((err) => console.error(err));
 };
 // /cart => POST
 exports.postCart = (req, res, next) => {
