@@ -1,5 +1,5 @@
 const Product = require("../models/product");
-const Cart = require("../models/cart");
+const Order = require("../models/order");
 // const { where } = require("sequelize");
 
 // / => GET
@@ -123,6 +123,35 @@ exports.postCartDeleteProduct = (req, res, next) => {
 // /orders => GET
 exports.getOrders = (req, res, next) => {
   res.render("shop/orders", { pageTitle: "Ordenes", path: "/orders" });
+};
+// /orders => POST
+exports.postOrder = (req, res, next) => {
+  req.user
+    .getCart()
+    .then((cart) => {
+      return cart.getProducts();
+    })
+    .then((products) => {
+      return req.user
+        .createOrder()
+        .then((order) => {
+          return order.addProducts(
+            products.map((product) => {
+              product.orderItem = { quantity: product.cartItem.quantity };
+              return product;
+            })
+          );
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    })
+    .then((result) => {
+      res.redirect("/orders");
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 };
 // /checkout => GET
 exports.getCheckout = (req, res, next) => {

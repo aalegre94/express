@@ -1,25 +1,59 @@
-<%- include('../includes/head.ejs') %>
-</head>
+<!-- <%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/cart.css">
+    </head>
 
-<body>
-<%- include('../includes/navigation.ejs') %>
-<main>
-    <% if (products.length > 0 ) { %>
-        <ul>
-            <% products.forEach(p =>  { %>
-                <li>
-                    <p>
-                        <img class="img_cart" src="<%= p.imageUrl %>" alt=""> <%= p.title %> (<%= p.cartItem.quantity %>)
-                    </p>
-                    <form action="/cart-delete-item" method="POST">
-                        <input type="hidden" name="id" value="<%= p.id %>">
-                        <button type="submit" class="btn">Borrar</button>
+    <body>
+        <%- include('../includes/navigation.ejs') %>
+        <main>
+            <% if (products.length > 0) { %>
+                <ul class="cart__item-list">
+                    <% products.forEach(p => { %>
+                        <li class="cart__item">
+                            <h1><%= p.title %></h1>
+                            <h2>Quantity: <%= p.cartItem.quantity %></h2>
+                            <form action="/cart-delete-item" method="POST">
+                                <input type="hidden" value="<%= p.id %>" name="productId">
+                                <button class="btn danger" type="submit">Delete</button>
+                            </form>
+                        </li>
+                    <% }) %>
+                </ul>
+            <% } else { %>
+                <h1>No Products in Cart!</h1>
+            <% } %>
+        </main>
+        <%- include('../includes/end.ejs') %> -->
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/cart.css">
+    </head>
+
+    <body>
+        <%- include('../includes/navigation.ejs') %>
+        <main>
+            <% if (products.length > 0 ) { %>
+                <ul class="cart__item-list">
+                    <% products.forEach(p =>  { %>
+                        <li class="cart__item">
+                            <h1><%= p.title %></h1>
+                            <p>
+                                <img class="img_cart" src="<%= p.imageUrl %>" alt=""> 
+                            </p>
+                            <h2>Quantity: <%= p.cartItem.quantity %></h2>
+                            <form action="/cart-delete-item" method="POST">
+                                <input type="hidden" name="id" value="<%= p.id %>">
+                                <button type="submit" class="btn">Borrar</button>
+                            </form>
+                        </li>
+                    <% })%>
+                </ul>
+                <hr>
+                <div class="centered">
+                    <form action="/create-order" method="POST">
+                        <button type="submit" class="btn">Ordena ahora!</button>
                     </form>
-                </li>
-            <% })%>
-        </ul>
-    <% } else { %>
-        <h1>No hay productos en el carro</h1>
-    <% } %>    
-</main>
+                </div>
+            <% } else { %>
+                <h1>No hay productos en el carro</h1>
+            <% } %>    
+        </main>
 <%- include('../includes/end.ejs') %>
