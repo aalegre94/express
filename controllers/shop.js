@@ -4,7 +4,7 @@ const Order = require("../models/order");
 
 // / => GET
 exports.getIndex = (req, res, next) => {
-  Product.findAll()
+  Product.fetchAll()
     .then((products) => {
       res.render("shop/index", {
         pageTitle: "Shop",
@@ -16,7 +16,7 @@ exports.getIndex = (req, res, next) => {
 };
 // /products => GET
 exports.getProducts = (req, res, next) => {
-  Product.findAll()
+  Product.fetchAll()
     .then((products) => {
       res.render("shop/lista-de-productos", {
         pageTitle: "Productos",
@@ -25,12 +25,11 @@ exports.getProducts = (req, res, next) => {
       });
     })
     .catch((err) => console.error(err));
-  (products) => {};
 };
 // /products/:productID => GET
 exports.getProduct = (req, res, next) => {
   const proId = req.params.productId;
-  Product.findByPk(proId)
+  Product.findOne(proId)
     .then((product) => {
       res.render("shop/detalle-del-producto", {
         pageTitle: product.title,
