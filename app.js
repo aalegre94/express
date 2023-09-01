@@ -11,7 +11,7 @@ app.set("views", "views");
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const errorController = require("./controllers/error");
-const mongoConnect = require("./util/database_dev");
+const mongoConnect = require("./util/database_dev").mongoConnect;
 // const sequelize = require("./util/database_prod");
 
 //Para ver el estado del request

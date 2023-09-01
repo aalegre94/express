@@ -8,5 +8,16 @@ class Product {
     this.imageUrl = imageUrl;
     this.description = description;
   }
-  save() {}
+
+  save() {
+    const db = getDb();
+    db.collection("products")
+      .insertOne(this)
+      .then((resultado) => {
+        console.log(resultado);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 }
