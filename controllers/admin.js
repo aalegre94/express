@@ -28,6 +28,15 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
+  const product = new Product(title, price, imageUrl, description);
+  product
+    .save()
+    .then((resultado) => {
+      console.log("Product creado");
+      res.redirect("/admin/products");
+    })
+    .catch((err) => console.error(err));
+
   // 1ra Forma - Usando el objeto user recuperado de req.user en el midleware
   // Product.create({
   //   title: title,
@@ -46,20 +55,20 @@ exports.postAddProduct = (req, res, next) => {
   //   });
 
   // 2da Forma - Usando los metodos magicos de sequelize por las asociaciones
-  req.user
-    .createProduct({
-      title: title,
-      price: price,
-      imageUrl: imageUrl,
-      description: description,
-    })
-    .then((resultado) => {
-      console.log("Product creado");
-      res.redirect("/admin/products");
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+  // req.user
+  //   .createProduct({
+  //     title: title,
+  //     price: price,
+  //     imageUrl: imageUrl,
+  //     description: description,
+  //   })
+  //   .then((resultado) => {
+  //     console.log("Product creado");
+  //     res.redirect("/admin/products");
+  //   })
+  //   .catch((err) => {
+  //     console.error(err);
+  //   });
 };
 
 // /admin/edit-product/:productID?edit=true => GET
