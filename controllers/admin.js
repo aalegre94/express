@@ -23,7 +23,6 @@ exports.getProducts = (req, res, next) => {
     })
     .catch((err) => console.error(err));
 };
-
 // /admin/add-product => POST
 exports.postAddProduct = (req, res, next) => {
   const title = req.body.title;
@@ -39,7 +38,6 @@ exports.postAddProduct = (req, res, next) => {
     })
     .catch((err) => console.error(err));
 };
-
 // /admin/edit-product/:productID?edit=true => GET
 exports.getEditProduct = (req, res, next) => {
   const editMode = req.query.edit;
@@ -65,7 +63,7 @@ exports.getEditProduct = (req, res, next) => {
       console.error(err);
     });
 };
-
+// /admin/edit-product/:productID?edit=true => POST
 exports.postEditProduct = (req, res, next) => {
   const proId = req.body.id;
   const updateTitle = req.body.title;
@@ -89,14 +87,11 @@ exports.postEditProduct = (req, res, next) => {
     })
     .catch((err) => console.error);
 };
-
+// /admin/delete-product/ => POST
 exports.postDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  Product.findByPk(prodId)
-    .then((product) => {
-      return product.destroy();
-    })
-    .then((resultado) => {
+  Product.delete(prodId)
+    .then(() => {
       console.log("Producto eliminado");
       res.redirect("/admin/products");
     })
