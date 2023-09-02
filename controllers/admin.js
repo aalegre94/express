@@ -1,4 +1,8 @@
+const mongodb = require("mongodb");
 const Product = require("../models/product");
+
+const ObjectId = mongodb.ObjectId;
+
 // /admin/add-product => GET
 exports.getAddProduct = (req, res, next) => {
   res.render("admin/editar-producto", {
@@ -9,9 +13,7 @@ exports.getAddProduct = (req, res, next) => {
 };
 // /admin/products => GET
 exports.getProducts = (req, res, next) => {
-  // Product.findAll()
-  req.user
-    .getProducts()
+  Product.fetchAll()
     .then((products) => {
       res.render("admin/productos", {
         pageTitle: "Admin Productos",
@@ -36,39 +38,6 @@ exports.postAddProduct = (req, res, next) => {
       res.redirect("/admin/products");
     })
     .catch((err) => console.error(err));
-
-  // 1ra Forma - Usando el objeto user recuperado de req.user en el midleware
-  // Product.create({
-  //   title: title,
-  //   price: price,
-  //   imageUrl: imageUrl,
-  //   description: description,
-  //   userId: req.user.id,
-  // })
-  //   .then((resultado) => {
-  //     // console.log(resultado);
-  //     console.log("Product creado");
-  //     res.redirect("/admin/products");
-  //   })
-  //   .catch((err) => {
-  //     console.error(err);
-  //   });
-
-  // 2da Forma - Usando los metodos magicos de sequelize por las asociaciones
-  // req.user
-  //   .createProduct({
-  //     title: title,
-  //     price: price,
-  //     imageUrl: imageUrl,
-  //     description: description,
-  //   })
-  //   .then((resultado) => {
-  //     console.log("Product creado");
-  //     res.redirect("/admin/products");
-  //   })
-  //   .catch((err) => {
-  //     console.error(err);
-  //   });
 };
 
 // /admin/edit-product/:productID?edit=true => GET
@@ -78,11 +47,10 @@ exports.getEditProduct = (req, res, next) => {
     return res.redirect("/");
   }
   const proId = req.params.productId;
-  req.user
-    .getProducts({ where: { id: proId } })
-    // Product.findByPk(proId)
+  // console.log(`id - $(proId)`);}
+  Product.findOne(proId)
     .then((products) => {
-      const product = products[0];
+      const product = products;
       if (!product) {
         return res.redirect("/");
       }
@@ -96,19 +64,6 @@ exports.getEditProduct = (req, res, next) => {
     .catch((err) => {
       console.error(err);
     });
-  // Product.findById(proId)
-  //   .then(([product]) => {
-  //     if (!product) {
-  //       return res.redirect("/");
-  //     }
-  //     res.render("admin/editar-producto", {
-  //       pageTitle: "Edit Product",
-  //       path: "/admin/edit-product",
-  //       editing: editMode,
-  //       product: product[0],
-  //     });
-  //   })
-  //   .catch((err) => console.error);
 };
 
 exports.postEditProduct = (req, res, next) => {
@@ -117,14 +72,17 @@ exports.postEditProduct = (req, res, next) => {
   const updatePrice = req.body.price;
   const updateImageUrl = req.body.imageUrl;
   const updateDescription = req.body.description;
-  Product.findByPk(proId)
-    .then((product) => {
-      product.title = updateTitle;
-      product.price = updatePrice;
-      product.imageUrl = updateImageUrl;
-      product.description = updateDescription;
-      return product.save();
-    })
+
+  const product = new Product(
+    updateTitle,
+    updatePrice,
+    updateImageUrl,
+    updateDescription,
+    new ObjectId(proId)
+  );
+
+  product
+    .save()
     .then((resultado) => {
       console.log("Producto actualizado");
       res.redirect("/admin/products");
