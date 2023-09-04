@@ -12,7 +12,7 @@ const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const errorController = require("./controllers/error");
 const mongoConnect = require("./util/database_dev").mongoConnect;
-// const sequelize = require("./util/database_prod");
+const User = require("./models/user");
 
 //Para ver el estado del request
 // app.use(
@@ -22,6 +22,17 @@ const mongoConnect = require("./util/database_dev").mongoConnect;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use((req, res, next) => {
+  User.findOne("64f4ed01f17d79343d151c29")
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
